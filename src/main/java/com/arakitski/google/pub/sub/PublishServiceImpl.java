@@ -20,17 +20,15 @@ public class PublishServiceImpl implements PublishService {
     String projectId = "test-clould-java-1111";
 
     // Your topic ID
-    String topicId = "my-new-topic";
+    String topicId = "topic1";
 
     // Create a new topic
-//    TopicName topic = TopicName.create(projectId, topicId);
     try {
       publisher = Publisher.newBuilder(TopicName.create(projectId, topicId)).build();
     } catch (IOException e) {
       //todo
       e.printStackTrace();
     }
-
   }
 
   public void publish(String message) {

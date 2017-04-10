@@ -8,22 +8,15 @@
   <artifactId>google-pub-sub</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+    <google-api-pubsub.version>v1-rev8-1.21.0</google-api-pubsub.version>
+  </properties>
+  
   <dependencies>
     <dependency>
-      <groupId>com.google.cloud</groupId>
-      <artifactId>google-cloud-pubsub</artifactId>
-      <version>0.11.0-alpha</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>grpc-google-cloud-pubsub-v1</artifactId>
-      <version>0.1.6</version>
-      <exclusions>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-all</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-pubsub</artifactId>
+      <version>${google-api-pubsub.version}</version>
     </dependency>
   </dependencies>
 
