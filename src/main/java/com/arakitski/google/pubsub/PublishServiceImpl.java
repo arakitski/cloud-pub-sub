@@ -1,5 +1,7 @@
 package com.arakitski.google.pubsub;
 
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.pubsub.Pubsub;
 import com.google.api.services.pubsub.model.ListSubscriptionsResponse;
 import com.google.api.services.pubsub.model.ListTopicsResponse;
@@ -13,6 +15,7 @@ import com.google.api.services.pubsub.model.Subscription;
 import com.google.api.services.pubsub.model.Topic;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -22,10 +25,24 @@ import java.util.logging.Logger;
  */
 public class PublishServiceImpl extends AbstractPubSubService implements PublishService {
 
-  private static final Logger LOG =  Logger.getLogger(PublishServiceImpl.class.getName());
+  private static final Logger LOG = Logger.getLogger(PublishServiceImpl.class.getName());
 
   public PublishServiceImpl(Pubsub client, String projectId) {
     super(client, projectId);
+  }
+
+  @Override
+  public boolean isTopicExist(String topicName) throws IOException {
+    try {
+      Topic topic = client.projects().topics().get(buildTopicName(topicName)).execute();
+      return topic != null;
+    } catch (GoogleJsonResponseException e) {
+      if (e.getDetails().getCode() == 404) {
+        return false;
+      } else {
+        throw e;
+      }
+    }
   }
 
   @Override
@@ -38,7 +55,7 @@ public class PublishServiceImpl extends AbstractPubSubService implements Publish
     }
     PublishRequest publishRequest = new PublishRequest();
     publishRequest.setMessages(pubsubMessageList.build());
-    
+
     PublishResponse response = client.projects().topics()
         .publish(buildTopicName(topicName), publishRequest).execute();
     LOG.info("Messsage sended:" + response);
@@ -57,6 +74,7 @@ public class PublishServiceImpl extends AbstractPubSubService implements Publish
         .execute();
     LOG.info("Added topic " + topicName);
   }
+
   @Override
   public ImmutableList<String> getTopicList() throws IOException {
     ListTopicsResponse response = client.projects().topics().list(projectPath).execute();

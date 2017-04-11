@@ -9,11 +9,13 @@ import java.io.IOException;
  */
 public interface SubscriptionService {
 
-    void addSubscription(String topicName, String subscriptionName) throws IOException;
+  boolean isSubscriptionExist(String subscriptionName) throws IOException;
 
-    ImmutableList<String> readMessageList(String subscriptionName) throws IOException;
+  void addSubscription(String topicName, String subscriptionName) throws IOException;
 
-    void deleteSubscription(String subscriptionName) throws IOException;
+  ImmutableList<String> readMessageList(String subscriptionName) throws IOException;
 
-    ImmutableList<String> getSubscriptionList() throws IOException;
+  void deleteSubscription(String subscriptionName) throws IOException;
+
+  ImmutableList<String> getSubscriptionList() throws IOException;
 }

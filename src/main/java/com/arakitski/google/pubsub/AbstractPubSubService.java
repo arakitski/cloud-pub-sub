@@ -7,27 +7,27 @@ import com.google.api.services.pubsub.Pubsub;
  */
 public class AbstractPubSubService {
 
-    protected final String projectPath;
-    protected final Pubsub client;
+  protected final String projectPath;
+  protected final Pubsub client;
 
-    public AbstractPubSubService(Pubsub client, String projectId) {
-        this.client = client;
-        projectPath = "projects/" + projectId;
-    }
+  public AbstractPubSubService(Pubsub client, String projectId) {
+    this.client = client;
+    projectPath = "projects/" + projectId;
+  }
 
-    /**
-     * @param topicName must start with a letter, and contain only letters, numbers, '%', '~', '_',
-     * '.' or '+'
-     */
-    final String buildTopicName(String topicName) {
-        return projectPath + "/topics/" + topicName;
-    }
+  /**
+   * @param topicName must start with a letter, and contain only letters, numbers, '%', '~', '_',
+   *                  '.' or '+'
+   */
+  final String buildTopicName(String topicName) {
+    return projectPath + "/topics/" + topicName;
+  }
 
-    /**
-     * @param subscriptionName must start with a letter, and contain only letters, numbers, '%', '~',
-     * '_', '.' or '+'
-     */
-    protected final String buildSubscriptionName(String subscriptionName) {
-        return projectPath + "/subscriptions/" + subscriptionName;
-    }
+  /**
+   * @param subscriptionName must start with a letter, and contain only letters, numbers, '%', '~',
+   *                         '_', '.' or '+'
+   */
+  protected final String buildSubscriptionName(String subscriptionName) {
+    return projectPath + "/subscriptions/" + subscriptionName;
+  }
 }

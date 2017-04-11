@@ -5,27 +5,71 @@ import com.google.api.client.googleapis.util.Utils;
 import com.google.api.services.pubsub.Pubsub;
 import com.google.api.services.pubsub.PubsubScopes;
 import com.google.common.collect.ImmutableList;
+
 import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class QuickstartSample {
 
+  private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class.getName());
+
   private static final String PROJECT_ID = "test-clould-java-1111";
-  
+
   public static void main(String... args) throws Exception {
     Pubsub pubsub = createClient();
     PublishServiceImpl publishService = new PublishServiceImpl(pubsub, PROJECT_ID);
     SubscriptionService supService = new SubscriptionServiceImpl(pubsub, PROJECT_ID);
-    publishService.addTopic("topic");
+    if (!publishService.isTopicExist("topic")) {
+      publishService.addTopic("topic");
+    }
+    if (!supService.isSubscriptionExist("sub1")) {
+      supService.addSubscription("topic", "sub1");
 
-    supService.addSubscription("topic", "sub1");
-    publishService.publish("topic", ImmutableList.of("test1", "test2", "test3", "test335"));
-    supService.addSubscription("topic", "sub2");
-    publishService.publish("topic", ImmutableList.of("test3", "test4"));
-    supService.readMessageList("sub1");
-    supService.readMessageList("sub2");
-    publishService.publish("topic", ImmutableList.of("test6", "test7"));
-    supService.readMessageList("sub1");
-    supService.readMessageList("sub2");
+    }
+    if (!supService.isSubscriptionExist("sub2")) {
+      supService.addSubscription("topic", "sub2");
+    }
+
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(3);
+
+    executorService.scheduleAtFixedRate(() -> {
+          try {
+            publishService.publish("topic", ImmutableList.of("message1-" + UUID.randomUUID(), "message2-" + UUID.randomUUID()));
+          } catch (IOException e) {
+            LOG.log(Level.WARNING, e.getMessage());
+          }
+        },
+        1,
+        2,
+        TimeUnit.SECONDS);
+    executorService.scheduleAtFixedRate(() -> {
+          try {
+            supService.readMessageList("sub1");
+          } catch (IOException e) {
+            LOG.log(Level.WARNING, e.getMessage());
+          }
+        },
+        2,
+        1,
+        TimeUnit.SECONDS);
+    executorService.scheduleAtFixedRate(() -> {
+          try {
+            supService.readMessageList("sub2");
+          } catch (IOException e) {
+            LOG.log(Level.WARNING, e.getMessage());
+          }
+        },
+        1,
+        5,
+        TimeUnit.SECONDS);
+    executorService.awaitTermination(15, TimeUnit.SECONDS);
+    executorService.shutdown();
 
     supService.getSubscriptionList();
     publishService.getTopicList();

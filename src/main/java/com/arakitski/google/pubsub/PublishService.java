@@ -8,13 +8,13 @@ import java.io.IOException;
  */
 public interface PublishService {
 
+  boolean isTopicExist(String topicName) throws IOException;
+
   void publish(String topicName, ImmutableList<String> messageList) throws IOException;
 
   void addTopic(String topicName) throws IOException;
 
   void deleteTopic(String topicName) throws IOException;
-
-
 
   ImmutableList<String> getTopicList() throws IOException;
 }
