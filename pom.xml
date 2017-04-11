@@ -10,6 +10,7 @@
 
   <properties>
     <google-api-pubsub.version>v1-rev8-1.21.0</google-api-pubsub.version>
+    <google-cloud.version>0.11.0-alpha</google-cloud.version>
   </properties>
   
   <dependencies>
@@ -17,6 +18,11 @@
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-pubsub</artifactId>
       <version>${google-api-pubsub.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-pubsub</artifactId>
+      <version>${google-cloud.version}</version>
     </dependency>
   </dependencies>
 
