@@ -1,4 +1,4 @@
-package com.arakitski.google.pub.sub;
+package com.arakitski.google.pubsub;
 
 import com.google.common.collect.ImmutableList;
 import java.io.IOException;

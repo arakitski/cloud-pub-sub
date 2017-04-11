@@ -1,4 +1,4 @@
-package com.arakitski.google.pub.sub;
+package com.arakitski.google.pubsub;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.util.Utils;
