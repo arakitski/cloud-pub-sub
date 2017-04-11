@@ -59,6 +59,7 @@ public class PublishServiceImpl implements PublishService {
     client.projects().topics()
         .create(buildTopicName(topicName), new Topic())
         .execute();
+    LOG.info("Added topic " + topicName);
   }
 
   @Override
