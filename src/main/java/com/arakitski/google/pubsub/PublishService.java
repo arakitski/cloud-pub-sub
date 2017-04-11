@@ -14,13 +14,7 @@ public interface PublishService {
 
   void deleteTopic(String topicName) throws IOException;
 
-  void addSubscription(String topicName, String subscriptionName) throws IOException;
 
-  ImmutableList<String> readMessageFromSubscription(String subscriptionName) throws IOException;
-
-  void deleteSubscription(String subscriptionName) throws IOException;
-
-  ImmutableList<String> getSubscriptionList() throws IOException;
 
   ImmutableList<String> getTopicList() throws IOException;
 }

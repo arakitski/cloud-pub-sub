@@ -9,28 +9,31 @@ import java.io.IOException;
 
 public class QuickstartSample {
 
+  private static final String PROJECT_ID = "test-clould-java-1111";
+  
   public static void main(String... args) throws Exception {
     Pubsub pubsub = createClient();
-    PublishServiceImpl publishService = new PublishServiceImpl(pubsub);
+    PublishServiceImpl publishService = new PublishServiceImpl(pubsub, PROJECT_ID);
+    SubscriptionService supService = new SubscriptionServiceImpl(pubsub, PROJECT_ID);
     publishService.addTopic("topic");
 
-    publishService.addSubscription("topic", "sub1");
+    supService.addSubscription("topic", "sub1");
     publishService.publish("topic", ImmutableList.of("test1", "test2", "test3", "test335"));
-    publishService.addSubscription("topic", "sub2");
+    supService.addSubscription("topic", "sub2");
     publishService.publish("topic", ImmutableList.of("test3", "test4"));
-    publishService.readMessageFromSubscription("sub1");
-    publishService.readMessageFromSubscription("sub2");
+    supService.readMessageList("sub1");
+    supService.readMessageList("sub2");
     publishService.publish("topic", ImmutableList.of("test6", "test7"));
-    publishService.readMessageFromSubscription("sub1");
-    publishService.readMessageFromSubscription("sub2");
+    supService.readMessageList("sub1");
+    supService.readMessageList("sub2");
 
-    publishService.getSubscriptionList();
+    supService.getSubscriptionList();
     publishService.getTopicList();
     publishService.deleteTopic("topic");
-    publishService.deleteSubscription("sub1");
-    publishService.deleteSubscription("sub2");
-    assert (!publishService.getSubscriptionList().contains("sub1"));
-    assert (!publishService.getSubscriptionList().contains("sub2"));
+    supService.deleteSubscription("sub1");
+    supService.deleteSubscription("sub2");
+    assert (!supService.getSubscriptionList().contains("sub1"));
+    assert (!supService.getSubscriptionList().contains("sub2"));
     assert (!publishService.getTopicList().contains("topic"));
   }
 

@@ -20,16 +20,12 @@ import java.util.logging.Logger;
 /**
  * Implementation for the {@link PublishService}
  */
-public class PublishServiceImpl implements PublishService {
+public class PublishServiceImpl extends AbstractPubSubService implements PublishService {
 
   private static final Logger LOG =  Logger.getLogger(PublishServiceImpl.class.getName());
 
-  private static final String PROJECT_ID = "test-clould-java-1111";
-  private static final String PROJECT = "projects/" + PROJECT_ID;
-  private final Pubsub client;
-
-  public PublishServiceImpl(Pubsub client) {
-    this.client = client;
+  public PublishServiceImpl(Pubsub client, String projectId) {
+    super(client, projectId);
   }
 
   @Override
@@ -61,46 +57,9 @@ public class PublishServiceImpl implements PublishService {
         .execute();
     LOG.info("Added topic " + topicName);
   }
-
-  @Override
-  public void addSubscription(String topicName, String subscriptionName) throws IOException {
-    Subscription subscription = 
-        new Subscription().setTopic(buildTopicName(topicName));
-    Subscription executeResult = client.projects().subscriptions()
-        .create(buildSubscriptionName(subscriptionName), subscription)
-        .execute();
-    LOG.info("subscription created = " + executeResult);
-  }
-
-  @Override
-  public void deleteSubscription(String subscriptionName) throws IOException {
-    client.projects().subscriptions()
-        .delete(buildSubscriptionName(subscriptionName))
-        .execute();
-    LOG.info("subscription " + subscriptionName + " removed.");
-  }
-
-  @Override
-  public ImmutableList<String> getSubscriptionList() throws IOException {
-    ListSubscriptionsResponse response = client.projects().subscriptions().list(PROJECT)
-        .execute();
-    List<Subscription> subscriptions = response.getSubscriptions();
-    if (subscriptions != null) {
-      Builder<String> subListBuilder = ImmutableList.builder();
-      for (Subscription subscription : subscriptions) {
-        subListBuilder.add(subscription.getName());
-      }
-      LOG.info("List of subscription = " + subListBuilder.build());
-      return subListBuilder.build();
-    }
-    LOG.info("List of subscription is empty ");
-    return ImmutableList.of();
-  }
-
-
   @Override
   public ImmutableList<String> getTopicList() throws IOException {
-    ListTopicsResponse response = client.projects().topics().list(PROJECT).execute();
+    ListTopicsResponse response = client.projects().topics().list(projectPath).execute();
     List<Topic> topics = response.getTopics();
     if (topics != null) {
       Builder<String> topicListBuilder = ImmutableList.builder();
@@ -112,45 +71,5 @@ public class PublishServiceImpl implements PublishService {
     }
     LOG.info("List of subscription is empty ");
     return ImmutableList.of();
-  }
-
-
-  @Override
-  public ImmutableList<String> readMessageFromSubscription(String subscriptionName) throws IOException {
-    PullRequest pullRequest = new PullRequest()
-        .setReturnImmediately(true)
-        .setMaxMessages(1000);
-    PullResponse pullResponse = client.projects().subscriptions()
-        .pull(buildSubscriptionName(subscriptionName), pullRequest)
-        .execute();
-    if (pullResponse != null) {
-      List<ReceivedMessage> receivedMessages = pullResponse.getReceivedMessages();
-      if (receivedMessages != null) {
-        ImmutableList.Builder<String> responseBuilder = ImmutableList.builder();
-        for (ReceivedMessage receivedMessage : receivedMessages) {
-          responseBuilder.add(new String(receivedMessage.getMessage().decodeData(), "UTF-8"));
-        }
-        LOG.info("Message received for " + subscriptionName + ":: " + responseBuilder.build());
-        return responseBuilder.build();
-      }
-    }
-    LOG.info("Message not found for sub=" + subscriptionName);
-    return ImmutableList.of();
-  }
-
-  /**
-   * @param topicName must start with a letter, and contain only letters, numbers, '%', '~', '_',
-   * '.' or '+'
-   */
-  private static String buildTopicName(String topicName) {
-    return PROJECT + "/topics/" + topicName;
-  }
-
-  /**
-   * @param subscriptionName must start with a letter, and contain only letters, numbers, '%', '~',
-   * '_', '.' or '+'
-   */
-  private static String buildSubscriptionName(String subscriptionName) {
-    return PROJECT + "/subscriptions/" + subscriptionName;
   }
 }
