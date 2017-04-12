@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableList;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,37 +36,28 @@ public class QuickstartSample {
     }
 
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(3);
-
     executorService.scheduleAtFixedRate(() -> {
-          try {
-            publishService.publish("topic", ImmutableList.of("message1-" + UUID.randomUUID(), "message2-" + UUID.randomUUID()));
-          } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage());
-          }
-        },
-        1,
-        2,
-        TimeUnit.SECONDS);
+      try {
+        publishService.publish("topic",
+            ImmutableList.of("message1-" + UUID.randomUUID(), "message2-" + UUID.randomUUID()));
+      } catch (IOException e) {
+        LOG.log(Level.WARNING, e.getMessage());
+      }
+    }, 1, 2, TimeUnit.SECONDS);
     executorService.scheduleAtFixedRate(() -> {
-          try {
-            supService.readMessageList("sub1");
-          } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage());
-          }
-        },
-        2,
-        1,
-        TimeUnit.SECONDS);
+      try {
+        supService.readMessageList("sub1");
+      } catch (IOException e) {
+        LOG.log(Level.WARNING, e.getMessage());
+      }
+    }, 2, 1, TimeUnit.SECONDS);
     executorService.scheduleAtFixedRate(() -> {
-          try {
-            supService.readMessageList("sub2");
-          } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage());
-          }
-        },
-        1,
-        5,
-        TimeUnit.SECONDS);
+      try {
+        supService.readMessageList("sub2");
+      } catch (IOException e) {
+        LOG.log(Level.WARNING, e.getMessage());
+      }
+    }, 1, 5, TimeUnit.SECONDS);
     executorService.awaitTermination(15, TimeUnit.SECONDS);
     executorService.shutdown();
 
