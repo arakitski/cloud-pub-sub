@@ -1,4 +1,4 @@
-package com.arakitski.google.pubsub;
+package com.arakitski.google.pubsub.api;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.pubsub.Pubsub;
@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Implementation for {@link SubscriptionService}
+ * Implementation for {@link SubscriptionApiService}
  */
-public class SubscriptionServiceImpl extends AbstractPubSubService implements SubscriptionService {
+public class SubscriptionApiServiceImpl extends AbstractPubSubService implements
+    SubscriptionApiService {
 
-  private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class.getName());
+  private static final Logger LOG = Logger.getLogger(SubscriptionApiServiceImpl.class.getName());
 
-  public SubscriptionServiceImpl(Pubsub client, String projectId) {
+  public SubscriptionApiServiceImpl(Pubsub client, String projectId) {
     super(client, projectId);
   }
 

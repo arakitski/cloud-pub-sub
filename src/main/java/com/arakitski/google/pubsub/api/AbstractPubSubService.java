@@ -1,4 +1,4 @@
-package com.arakitski.google.pubsub;
+package com.arakitski.google.pubsub.api;
 
 import com.google.api.services.pubsub.Pubsub;
 

@@ -1,17 +1,11 @@
-package com.arakitski.google.pubsub;
+package com.arakitski.google.pubsub.api;
 
-import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.pubsub.Pubsub;
-import com.google.api.services.pubsub.model.ListSubscriptionsResponse;
 import com.google.api.services.pubsub.model.ListTopicsResponse;
 import com.google.api.services.pubsub.model.PublishRequest;
 import com.google.api.services.pubsub.model.PublishResponse;
 import com.google.api.services.pubsub.model.PubsubMessage;
-import com.google.api.services.pubsub.model.PullRequest;
-import com.google.api.services.pubsub.model.PullResponse;
-import com.google.api.services.pubsub.model.ReceivedMessage;
-import com.google.api.services.pubsub.model.Subscription;
 import com.google.api.services.pubsub.model.Topic;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
@@ -21,13 +15,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Implementation for the {@link PublishService}
+ * Implementation for the {@link PublishApiService}
  */
-public class PublishServiceImpl extends AbstractPubSubService implements PublishService {
+public class PublishApiServiceImpl extends AbstractPubSubService implements PublishApiService {
 
-  private static final Logger LOG = Logger.getLogger(PublishServiceImpl.class.getName());
+  private static final Logger LOG = Logger.getLogger(PublishApiServiceImpl.class.getName());
 
-  public PublishServiceImpl(Pubsub client, String projectId) {
+  public PublishApiServiceImpl(Pubsub client, String projectId) {
     super(client, projectId);
   }
 

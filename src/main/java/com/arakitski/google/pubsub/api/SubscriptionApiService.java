@@ -1,4 +1,4 @@
-package com.arakitski.google.pubsub;
+package com.arakitski.google.pubsub.api;
 
 import com.google.common.collect.ImmutableList;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Interface for the read message to the google pubsub cloud.
  */
-public interface SubscriptionService {
+public interface SubscriptionApiService {
 
   boolean isSubscriptionExist(String subscriptionName) throws IOException;
 

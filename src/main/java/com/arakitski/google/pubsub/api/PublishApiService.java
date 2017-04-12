@@ -1,4 +1,4 @@
-package com.arakitski.google.pubsub;
+package com.arakitski.google.pubsub.api;
 
 import com.google.common.collect.ImmutableList;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * Interface for the publish message to the google pubsub cloud.
  */
-public interface PublishService {
+public interface PublishApiService {
 
   boolean isTopicExist(String topicName) throws IOException;
 
